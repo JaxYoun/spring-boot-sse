@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>111</title>
+</head>
+<body>
+    <button id="btn">建立连接</button>
+    <button id="btn2">关闭连接</button>
+    <div id="result"></div>
+    <script>
+        var btn = document.querySelector("#btn");
+        var btn2 = document.querySelector("#btn2");
+        var result = document.querySelector("#result");
+        var source;
+        btn.onclick = function () {
+            source = new EventSource("http://localhost:8080/sse/openSse/1");
+            source.addEventListener("open", function () {
+                result.innerHTML += "建立连接<br/>";
+            }, false);
+            source.addEventListener("connecttime", function (e) {
+                result.innerHTML += "连接已建立：" + e.data + "<br/>";
+            }, false);
+            source.addEventListener("message", function (e) {
+                result.innerHTML += "接受更新时间：" + e.data + "<br/>";
+            }, false)
+        };
+        btn2.onclick = function () {
+            if (source) {
+                source.close();
+                result.innerHTML += "关闭连接<br/>";
+            }
+        }
+    </script>
+</body>
+</html>
